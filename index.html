@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LifePulse">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#0A0A14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LifePulse">
+<meta name="description" content="Your AI life coach. Track mood, habits, money, and focus — then let AI connect the dots.">
+<title>LifePulse — AI Life Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0A0A14;
+  --surface:#12121F;
+  --surface2:#1A1A2E;
+  --surface3:#222238;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.12);
+  --text:#F0EDF8;
+  --muted:#8B8BA0;
+  --light:#555568;
+  --accent:#7C5CFC;
+  --accent2:#9B7FFF;
+  --accent3:#C4B0FF;
+  --accent-bg:rgba(124,92,252,0.12);
+  --accent-border:rgba(124,92,252,0.3);
+  --teal:#00C9A7;
+  --teal-bg:rgba(0,201,167,0.1);
+  --amber:#F5A623;
+  --amber-bg:rgba(245,166,35,0.1);
+  --rose:#FF6B8A;
+  --rose-bg:rgba(255,107,138,0.1);
+  --green:#4ADE80;
+  --green-bg:rgba(74,222,128,0.1);
+  --danger:#FF4757;
+  --danger-bg:rgba(255,71,87,0.1);
+  --r:16px;--rs:12px;--rxs:8px;
+  --shadow:0 1px 3px rgba(0,0,0,0.4);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.5);
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;font-size:15px;line-height:1.6}
+body{display:flex;flex-direction:column;min-height:100dvh}
+
+/* ── ONBOARDING ─────────────────────────────────────────────── */
+.onboard{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;flex-direction:column;overflow-y:auto}
+.onboard-hero{background:linear-gradient(160deg,#0A0A14 0%,#1A0F3A 50%,#0A0A14 100%);padding:60px 24px 40px;text-align:center;position:relative;overflow:hidden}
+.onboard-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(124,92,252,0.2) 0%,transparent 70%)}
+.pulse-ring{width:100px;height:100px;margin:0 auto 28px;position:relative;z-index:1}
+.pulse-ring-inner{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#7C5CFC,#9B7FFF);display:flex;align-items:center;justify-content:center;font-size:40px;position:relative}
+.pulse-ring-inner::before,.pulse-ring-inner::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(124,92,252,0.3);animation:pulseRing 2s ease-out infinite}
+.pulse-ring-inner::after{inset:-16px;animation-delay:.5s;border-color:rgba(124,92,252,0.15)}
+@keyframes pulseRing{0%{transform:scale(0.95);opacity:1}100%{transform:scale(1.1);opacity:0}}
+.onboard-title{font-size:36px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;position:relative;z-index:1}
+.onboard-title span{background:linear-gradient(135deg,#7C5CFC,#C4B0FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.onboard-sub{font-size:15px;color:var(--muted);line-height:1.7;max-width:320px;margin:0 auto;position:relative;z-index:1}
+.onboard-body{padding:28px 20px 48px;flex:1}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 14px;text-align:center}
+.feature-icon{font-size:28px;margin-bottom:8px;display:block}
+.feature-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.feature-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.onboard-cta{background:linear-gradient(135deg,#7C5CFC,#9B7FFF);border:none;border-radius:var(--rs);padding:17px;width:100%;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:#fff;cursor:pointer;margin-bottom:14px;transition:all .2s}
+.onboard-cta:active{transform:scale(0.98)}
+.onboard-cta-ghost{background:transparent;border:1px solid var(--border2);border-radius:var(--rs);padding:13px;width:100%;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer}
+
+/* ── UPGRADE SCREEN ─────────────────────────────────────────── */
+.upgrade-screen{position:fixed;inset:0;background:var(--bg);z-index:900;display:none;flex-direction:column;overflow-y:auto}
+.upgrade-screen.open{display:flex}
+.upgrade-hero{background:linear-gradient(160deg,#0A0A14,#1A0F3A,#0A0A14);padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden}
+.upgrade-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(124,92,252,0.25) 0%,transparent 70%)}
+.upgrade-badge{display:inline-block;background:linear-gradient(135deg,#7C5CFC,#9B7FFF);border-radius:99px;padding:5px 16px;font-size:11px;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px;position:relative;z-index:1}
+.upgrade-title{font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:10px;position:relative;z-index:1}
+.upgrade-sub{font-size:14px;color:var(--muted);line-height:1.7;position:relative;z-index:1}
+.upgrade-body{padding:24px 20px 48px;flex:1}
+.plan-cards{display:flex;gap:10px;margin-bottom:20px}
+.plan-card{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:18px 14px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.plan-card.selected{border-color:var(--accent);background:var(--accent-bg)}
+.plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.plan-price{font-size:26px;font-weight:800;color:var(--text);margin-bottom:2px}
+.plan-period{font-size:11px;color:var(--muted);margin-bottom:4px}
+.plan-save{font-size:11px;color:var(--teal);font-weight:600}
+.perks-list{margin-bottom:24px}
+.perk-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.perk-item:last-child{border-bottom:none}
+.perk-icon{width:32px;height:32px;border-radius:var(--rxs);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.perk-text{font-size:13px;font-weight:500}
+.perk-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.upgrade-btn{background:linear-gradient(135deg,#7C5CFC,#9B7FFF);border:none;border-radius:var(--rs);padding:17px;width:100%;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:#fff;cursor:pointer;margin-bottom:10px;transition:all .2s}
+.upgrade-btn:active{transform:scale(0.98)}
+.upgrade-cancel{background:transparent;border:none;padding:10px;width:100%;font-family:'Inter',sans-serif;font-size:13px;color:var(--muted);cursor:pointer}
+.guarantee{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:12px 14px;margin-bottom:20px;font-size:12px;color:var(--muted)}
+
+/* ── MAIN APP ───────────────────────────────────────────────── */
+.app{flex:1;max-width:480px;margin:0 auto;width:100%;display:flex;flex-direction:column}
+.screen{flex:1;overflow-y:auto;padding:16px 16px 100px;display:none}
+.screen.active{display:block}
+
+/* ── CHECK-IN BANNER ────────────────────────────────────────── */
+.checkin-banner{background:linear-gradient(135deg,rgba(124,92,252,0.15),rgba(155,127,255,0.1));border:1px solid var(--accent-border);border-radius:var(--r);padding:16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.checkin-banner:active{opacity:.9}
+.checkin-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);flex-shrink:0;animation:glow 2s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 6px var(--accent)}50%{box-shadow:0 0 14px var(--accent)}}
+.checkin-text{flex:1}
+.checkin-title{font-size:13px;font-weight:600;color:var(--accent3)}
+.checkin-sub{font-size:11px;color:var(--muted)}
+.checkin-arrow{color:var(--accent);font-size:18px}
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.hdr-left{display:flex;align-items:center;gap:10px}
+.hdr-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7C5CFC,#9B7FFF);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0}
+.hdr-greeting{font-size:15px;font-weight:600}
+.hdr-date{font-size:11px;color:var(--muted);margin-top:1px;font-family:'JetBrains Mono',monospace}
+.pro-badge{background:linear-gradient(135deg,#7C5CFC,#9B7FFF);border-radius:99px;padding:4px 10px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.5px}
+.streak-badge{background:var(--amber-bg);border:1px solid rgba(245,166,35,0.2);border-radius:99px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--amber);display:flex;align-items:center;gap:4px}
+
+/* ── INSIGHT CARD ───────────────────────────────────────────── */
+.insight-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px;position:relative;overflow:hidden}
+.insight-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#7C5CFC,#00C9A7)}
+.insight-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.insight-icon{width:28px;height:28px;border-radius:var(--rxs);background:var(--accent-bg);display:flex;align-items:center;justify-content:center;font-size:14px}
+.insight-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.insight-text{font-size:14px;color:var(--text);line-height:1.7}
+.insight-highlight{color:var(--accent3);font-weight:600}
+.insight-empty{text-align:center;padding:20px 0;color:var(--muted);font-size:13px}
+
+/* ── STATS ROW ──────────────────────────────────────────────── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:12px 8px;text-align:center}
+.stat-val{font-size:20px;font-weight:700;line-height:1}
+.stat-lbl{font-size:9px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ── SECTION ────────────────────────────────────────────────── */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.section-title{font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.section-action{font-size:12px;color:var(--accent);cursor:pointer;font-weight:500}
+
+/* ── MOOD STRIP ─────────────────────────────────────────────── */
+.mood-strip{display:flex;gap:6px;margin-bottom:16px}
+.mood-btn{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:10px 4px;text-align:center;cursor:pointer;transition:all .2s}
+.mood-btn.selected{border-color:var(--accent);background:var(--accent-bg)}
+.mood-emoji{font-size:22px;display:block;margin-bottom:3px}
+.mood-label{font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.mood-btn.selected .mood-label{color:var(--accent3)}
+
+/* ── HABIT ITEMS ────────────────────────────────────────────── */
+.habit-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;transition:all .2s}
+.habit-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:13px}
+.habit-check.done{background:var(--accent);border-color:var(--accent);box-shadow:0 0 10px rgba(124,92,252,0.4)}
+.habit-info{flex:1}
+.habit-name{font-size:14px;font-weight:500}
+.habit-name.done{text-decoration:line-through;color:var(--muted)}
+.habit-streak{font-size:11px;color:var(--amber);font-weight:600;margin-top:2px}
+.habit-time{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.add-habit-btn{background:var(--surface);border:1px dashed var(--border2);border-radius:var(--rs);padding:12px;width:100%;text-align:center;font-family:'Inter',sans-serif;font-size:13px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px;transition:all .2s}
+.add-habit-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── EXPENSE ITEMS ──────────────────────────────────────────── */
+.expense-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.expense-icon{width:36px;height:36px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.expense-info{flex:1}
+.expense-desc{font-size:13px;font-weight:500}
+.expense-meta{font-size:11px;color:var(--muted);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.expense-amount{font-size:15px;font-weight:700;color:var(--rose)}
+.expense-del{background:none;border:none;color:var(--light);cursor:pointer;font-size:16px;padding:2px 6px}
+.expense-del:hover{color:var(--danger)}
+.expense-total-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.expense-total-label{font-size:11px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px}
+.expense-total-val{font-size:24px;font-weight:800;color:var(--text)}
+
+/* ── FOCUS TIMER ────────────────────────────────────────────── */
+.timer-wrap{text-align:center;padding:20px 0 16px}
+.timer-ring-wrap{width:160px;height:160px;margin:0 auto 16px;position:relative}
+.timer-ring-wrap svg{transform:rotate(-90deg)}
+.timer-ring-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.timer-display{font-size:38px;font-weight:800;font-family:'JetBrains Mono',monospace;letter-spacing:-1px}
+.timer-mode{font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.preset-row{display:flex;gap:8px;margin-bottom:14px}
+.preset-btn{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:10px 6px;text-align:center;cursor:pointer;transition:all .2s}
+.preset-btn.active{background:var(--accent-bg);border-color:var(--accent-border)}
+.preset-time{font-size:18px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent3)}
+.preset-name{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.timer-task-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);outline:none;margin-bottom:12px}
+.timer-task-input:focus{border-color:var(--accent)}
+.timer-task-input::placeholder{color:var(--light)}
+.timer-controls{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
+.timer-btn-primary{background:linear-gradient(135deg,#7C5CFC,#9B7FFF);border:none;border-radius:var(--rs);padding:13px 28px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:#fff;cursor:pointer;transition:all .2s}
+.timer-btn-secondary{background:var(--surface);border:1px solid var(--border2);border-radius:var(--rs);padding:13px 20px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:var(--text);cursor:pointer}
+.session-log-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.session-log-item:last-child{border-bottom:none}
+.session-task-name{font-size:13px;color:var(--text)}
+.session-meta{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)}
+
+/* ── AI DEBRIEF ─────────────────────────────────────────────── */
+.debrief-card{background:var(--surface);border:1px solid var(--accent-border);border-radius:var(--r);padding:20px;margin-bottom:14px;position:relative;overflow:hidden}
+.debrief-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#7C5CFC,#00C9A7,#F5A623)}
+.debrief-loading{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 0}
+.ai-dots{display:flex;gap:6px}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:aiDot 1.2s ease-in-out infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}
+.ai-dot:nth-child(3){animation-delay:.4s}
+@keyframes aiDot{0%,100%{opacity:.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1)}}
+.debrief-section{margin-bottom:16px}
+.debrief-section-title{font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.debrief-text{font-size:14px;color:var(--text);line-height:1.8}
+.debrief-tag{display:inline-block;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:99px;padding:3px 10px;font-size:11px;color:var(--accent3);margin:3px 3px 3px 0;font-weight:500}
+.debrief-metric{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
+.debrief-metric:last-child{border-bottom:none}
+.debrief-metric-label{font-size:12px;color:var(--muted)}
+.debrief-metric-val{font-size:13px;font-weight:600}
+.pattern-alert{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px}
+.pattern-alert-title{font-size:12px;font-weight:700;color:var(--accent3);margin-bottom:4px}
+.pattern-alert-text{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* ── CHECK-IN MODAL ─────────────────────────────────────────── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--surface);border-top:1px solid var(--border2);border-radius:24px 24px 0 0;padding:24px 20px 44px;width:100%;max-width:480px;max-height:90dvh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 20px}
+.modal-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6}
+.modal-section{margin-bottom:20px}
+.modal-section-label{font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.modal-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);outline:none}
+.modal-input:focus{border-color:var(--accent)}
+.modal-input::placeholder{color:var(--light)}
+.sleep-rating{display:flex;gap:6px}
+.sleep-btn{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:10px;text-align:center;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .2s}
+.sleep-btn.selected{background:var(--accent-bg);border-color:var(--accent);color:var(--accent3)}
+.water-toggle{display:flex;gap:8px}
+.water-btn{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px;text-align:center;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .2s}
+.water-btn.yes{background:var(--teal-bg);border-color:rgba(0,201,167,0.3);color:var(--teal)}
+.water-btn.no{background:var(--danger-bg);border-color:rgba(255,71,87,0.3);color:var(--danger)}
+.intention-pills{display:flex;flex-wrap:wrap;gap:6px}
+.intention-pill{background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:6px 12px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .2s}
+.intention-pill.selected{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent3)}
+.modal-btn{background:linear-gradient(135deg,#7C5CFC,#9B7FFF);border:none;border-radius:var(--rs);padding:15px;width:100%;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:#fff;cursor:pointer;transition:all .2s}
+.modal-btn:active{transform:scale(0.98)}
+.modal-btn-ghost{background:transparent;border:1px solid var(--border);border-radius:var(--rs);padding:12px;width:100%;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;margin-top:8px}
+.modal-x{position:absolute;top:16px;right:16px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--muted)}
+.modal-wrap{position:relative}
+.note-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);outline:none;resize:none;line-height:1.6}
+.note-textarea:focus{border-color:var(--accent)}
+.note-textarea::placeholder{color:var(--light)}
+
+/* ── EXPENSE FORM ───────────────────────────────────────────── */
+.cat-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.cat-pill{padding:6px 12px;border-radius:99px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--muted);transition:all .2s}
+.cat-pill.selected{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent3)}
+.expense-form-row{display:flex;gap:8px}
+.expense-form-row .modal-input{flex:1}
+
+/* ── INSIGHT FULL ───────────────────────────────────────────── */
+.insight-full-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:10px}
+.insight-full-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.insight-full-icon{width:36px;height:36px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:18px}
+.insight-full-title{font-size:14px;font-weight:600}
+.insight-full-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.chart-bar-wrap{margin-top:10px}
+.chart-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.chart-bar-label{font-size:11px;color:var(--muted);width:30px;text-align:right;font-family:'JetBrains Mono',monospace}
+.chart-bar-track{flex:1;height:8px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.chart-bar-fill{height:100%;border-radius:99px;transition:width 1s ease}
+.chart-bar-val{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;width:28px}
+
+/* ── ACCOUNT ────────────────────────────────────────────────── */
+.profile-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.profile-avatar-lg{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7C5CFC,#9B7FFF);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0}
+.profile-info-name{font-size:17px;font-weight:700}
+.profile-info-plan{font-size:12px;color:var(--muted);margin-top:3px}
+.menu-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.menu-row:hover{border-color:var(--border2)}
+.menu-row-left{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500}
+.menu-row-icon{width:30px;height:30px;border-radius:var(--rxs);display:flex;align-items:center;justify-content:center;font-size:15px}
+.menu-row-arrow{color:var(--light);font-size:16px}
+.section-label-acc{font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:20px}
+
+/* ── TAB BAR ────────────────────────────────────────────────── */
+.tab-bar{display:flex;background:var(--surface);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom);position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;z-index:100}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;padding:11px 0 9px;gap:3px;cursor:pointer;border:none;background:none;transition:all .2s}
+.tab-icon{font-size:20px;color:var(--light)}
+.tab-label{font-size:9px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase;color:var(--light)}
+.tab.active .tab-icon{color:var(--accent2)}
+.tab.active .tab-label{color:var(--accent3)}
+
+/* ── MISC ───────────────────────────────────────────────────── */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-size:13px;font-weight:500;padding:10px 18px;border-radius:99px;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;box-shadow:var(--shadow-lg)}
+.toast.show{opacity:1}
+.empty-state{text-align:center;padding:40px 20px}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.3}
+.empty-title{font-size:15px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.empty-sub{font-size:13px;color:var(--light)}
+.fade-in{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.spin-sm{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- ONBOARDING -->
+<div id="onboarding" class="onboard" style="display:none">
+  <div class="onboard-hero">
+    <div class="pulse-ring"><div class="pulse-ring-inner">🫀</div></div>
+    <div class="onboard-title"><span>LifePulse</span></div>
+    <div style="font-size:13px;color:rgba(196,176,255,0.7);margin-bottom:8px;font-family:'JetBrains Mono',monospace;letter-spacing:1px">AI LIFE COACH</div>
+    <div class="onboard-sub">Track your mood, habits, money and focus. Let AI connect the dots and tell you why you feel the way you do.</div>
+  </div>
+  <div class="onboard-body">
+    <div class="feature-grid">
+      <div class="feature-card"><span class="feature-icon">🧠</span><div class="feature-title">AI Daily Debrief</div><div class="feature-sub">Personalized insights from your data every evening</div></div>
+      <div class="feature-card"><span class="feature-icon">🔮</span><div class="feature-title">Pattern Detection</div><div class="feature-sub">Discovers what actually makes you feel better</div></div>
+      <div class="feature-card"><span class="feature-icon">✅</span><div class="feature-title">Habit Tracking</div><div class="feature-sub">Non-punishing streaks that reward comeback</div></div>
+      <div class="feature-card"><span class="feature-icon">💡</span><div class="feature-title">Smart Check-ins</div><div class="feature-sub">3 quick check-ins per day, under 60 seconds each</div></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:14px;margin-bottom:20px;font-size:13px;color:var(--muted);line-height:1.7">
+      <span style="color:var(--accent3);font-weight:600">Your data stays on your device.</span> LifePulse never sends your personal data anywhere. Everything is stored locally and privately.
+    </div>
+    <button class="onboard-cta" onclick="startApp()">Get Started — It's Free</button>
+    <button class="onboard-cta-ghost" onclick="startApp()">I already have an account</button>
+  </div>
+</div>
+
+<!-- UPGRADE SCREEN -->
+<div class="upgrade-screen" id="upgradeScreen">
+  <div class="upgrade-hero">
+    <div class="upgrade-badge">LIFEPULSE PRO</div>
+    <div class="upgrade-title">Unlock Your AI Coach</div>
+    <div class="upgrade-sub">Get personalized daily insights, pattern detection, and weekly AI reports that tell you exactly what to change.</div>
+  </div>
+  <div class="upgrade-body">
+    <div class="plan-cards">
+      <div class="plan-card" id="planMonthly" onclick="selectPlan('monthly')">
+        <div class="plan-price">$4.99</div>
+        <div class="plan-period">per month</div>
+      </div>
+      <div class="plan-card selected" id="planYearly" onclick="selectPlan('yearly')">
+        <div class="plan-badge">BEST VALUE</div>
+        <div class="plan-price">$47.99</div>
+        <div class="plan-period">per year</div>
+        <div class="plan-save">Save 20% — $4.00/mo</div>
+      </div>
+    </div>
+    <div class="perks-list">
+      <div class="perk-item"><div class="perk-icon" style="background:var(--accent-bg)">🧠</div><div><div class="perk-text">AI Daily Debrief</div><div class="perk-sub">Personalized evening analysis of your day</div></div></div>
+      <div class="perk-item"><div class="perk-icon" style="background:var(--teal-bg)">🔮</div><div><div class="perk-text">Pattern Detection</div><div class="perk-sub">Discover what actually drives your mood and energy</div></div></div>
+      <div class="perk-item"><div class="perk-icon" style="background:var(--amber-bg)">📊</div><div><div class="perk-text">Weekly AI Report</div><div class="perk-sub">Every Sunday — your week in data with 3 specific actions</div></div></div>
+      <div class="perk-item"><div class="perk-icon" style="background:var(--rose-bg)">♾️</div><div><div class="perk-text">Unlimited Habits</div><div class="perk-sub">Free plan limited to 5 habits</div></div></div>
+      <div class="perk-item"><div class="perk-icon" style="background:var(--green-bg)">📅</div><div><div class="perk-text">Full History</div><div class="perk-sub">Access all your data — not just last 7 days</div></div></div>
+      <div class="perk-item"><div class="perk-icon" style="background:var(--accent-bg)">🎯</div><div><div class="perk-text">Correlation Engine</div><div class="perk-sub">See how mood, habits, money and focus connect</div></div></div>
+    </div>
+    <div class="guarantee">🛡️ 30-day money-back guarantee. No questions asked. Cancel anytime.</div>
+    <button class="upgrade-btn" onclick="activatePro()">Start Pro — Free 7-Day Trial</button>
+    <button class="upgrade-cancel" onclick="closeUpgrade()">Maybe later</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app" id="mainApp" style="display:none">
+
+  <!-- TODAY SCREEN -->
+  <div class="screen active" id="todayScreen">
+    <div class="hdr">
+      <div class="hdr-left">
+        <div class="hdr-avatar" id="hdrAvatar">L</div>
+        <div>
+          <div class="hdr-greeting" id="hdrGreeting">Good morning</div>
+          <div class="hdr-date" id="hdrDate"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="streak-badge" id="streakBadge"><span>🔥</span><span id="streakCount">0</span></div>
+        <div class="pro-badge" id="proBadge" style="display:none">PRO</div>
+      </div>
+    </div>
+
+    <!-- Check-in banner -->
+    <div class="checkin-banner" id="checkinBanner" onclick="openCheckin()" style="display:none">
+      <div class="checkin-dot"></div>
+      <div class="checkin-text">
+        <div class="checkin-title" id="checkinTitle">Morning check-in ready</div>
+        <div class="checkin-sub" id="checkinSub">Takes less than 60 seconds</div>
+      </div>
+      <div class="checkin-arrow">›</div>
+    </div>
+
+    <!-- AI Insight -->
+    <div class="section-hdr"><div class="section-title">// AI Insight</div><div class="section-action" onclick="openDebrief()">Full debrief ›</div></div>
+    <div class="insight-card" id="insightCard">
+      <div class="insight-header">
+        <div class="insight-icon">🧠</div>
+        <div class="insight-label">LifePulse AI</div>
+      </div>
+      <div class="insight-text" id="insightText">
+        <div class="insight-empty">Complete your first check-in to get personalized insights. The more you log, the smarter your coach gets.</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val" id="statMood">—</div><div class="stat-lbl">Mood</div></div>
+      <div class="stat-card"><div class="stat-val" id="statHabits">0%</div><div class="stat-lbl">Habits</div></div>
+      <div class="stat-card"><div class="stat-val" id="statSpend">$0</div><div class="stat-lbl">Spent</div></div>
+      <div class="stat-card"><div class="stat-val" id="statFocus">0m</div><div class="stat-lbl">Focus</div></div>
+    </div>
+
+    <!-- Today's mood -->
+    <div class="section-hdr"><div class="section-title">// Mood log</div><div class="section-action" onclick="openMoodModal()">Log mood ›</div></div>
+    <div class="mood-strip">
+      <div class="mood-btn" id="mb1" onclick="quickMood(1,this)"><span class="mood-emoji">😞</span><span class="mood-label">rough</span></div>
+      <div class="mood-btn" id="mb2" onclick="quickMood(2,this)"><span class="mood-emoji">😕</span><span class="mood-label">meh</span></div>
+      <div class="mood-btn" id="mb3" onclick="quickMood(3,this)"><span class="mood-emoji">😐</span><span class="mood-label">okay</span></div>
+      <div class="mood-btn" id="mb4" onclick="quickMood(4,this)"><span class="mood-emoji">🙂</span><span class="mood-label">good</span></div>
+      <div class="mood-btn" id="mb5" onclick="quickMood(5,this)"><span class="mood-emoji">😄</span><span class="mood-label">great</span></div>
+    </div>
+
+    <!-- Today's habits -->
+    <div class="section-hdr"><div class="section-title">// Today's habits</div><div class="section-action" onclick="switchTab('habits')">Manage ›</div></div>
+    <div id="todayHabits"></div>
+
+    <!-- Recent expense -->
+    <div class="section-hdr" style="margin-top:4px"><div class="section-title">// Recent spend</div><div class="section-action" onclick="switchTab('money')">All ›</div></div>
+    <div id="recentExpenses"></div>
+    <div style="height:8px"></div>
+  </div>
+
+  <!-- HABITS SCREEN -->
+  <div class="screen" id="habitsScreen">
+    <div style="margin-bottom:20px">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.5px">Habits</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:3px">// build your routine</div>
+    </div>
+    <div id="habitProgressWrap" style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <span style="font-size:12px;color:var(--muted)" id="habitProgressText">0 of 0 completed</span>
+        <span style="font-size:12px;color:var(--amber)" id="habitStreakText"></span>
+      </div>
+      <div style="background:var(--surface2);border-radius:99px;height:6px;overflow:hidden">
+        <div id="habitProgressBar" style="height:100%;background:linear-gradient(90deg,#7C5CFC,#9B7FFF);border-radius:99px;width:0%;transition:width .5s ease"></div>
+      </div>
+    </div>
+    <div id="allHabits"></div>
+    <button class="add-habit-btn" onclick="openAddHabit()">+ Add a new habit</button>
+    <div class="section-hdr" style="margin-top:8px"><div class="section-title">// This week</div></div>
+    <div id="weeklyHabits"></div>
+  </div>
+
+  <!-- MONEY SCREEN -->
+  <div class="screen" id="moneyScreen">
+    <div style="margin-bottom:20px">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.5px">Money</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:3px">// track every dollar</div>
+    </div>
+    <div class="expense-total-card">
+      <div>
+        <div class="expense-total-label">Today</div>
+        <div class="expense-total-val" id="todayTotal">$0.00</div>
+      </div>
+      <div style="text-align:right">
+        <div class="expense-total-label">This month</div>
+        <div style="font-size:18px;font-weight:700;color:var(--muted)" id="monthTotal">$0.00</div>
+      </div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div class="cat-row" id="catRow"></div>
+      <div class="expense-form-row" style="margin-bottom:8px">
+        <input class="modal-input" id="expDescInput" placeholder="Description" onkeydown="if(event.key==='Enter')addExpense()">
+        <input class="modal-input" id="expAmtInput" type="number" placeholder="$0.00" step="0.01" min="0" style="max-width:100px" onkeydown="if(event.key==='Enter')addExpense()">
+      </div>
+      <button onclick="addExpense()" style="background:linear-gradient(135deg,#7C5CFC,#9B7FFF);border:none;border-radius:var(--rs);padding:12px;width:100%;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:#fff;cursor:pointer">Log Expense</button>
+    </div>
+    <div class="section-hdr"><div class="section-title">// Today's expenses</div></div>
+    <div id="expenseList"></div>
+  </div>
+
+  <!-- FOCUS SCREEN -->
+  <div class="screen" id="focusScreen">
+    <div style="margin-bottom:20px">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.5px">Focus</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:3px">// deep work timer</div>
+    </div>
+    <div class="preset-row">
+      <div class="preset-btn active" id="preset25" onclick="setPreset(25,'Pomodoro',this)"><div class="preset-time">25</div><div class="preset-name">pomodoro</div></div>
+      <div class="preset-btn" id="preset50" onclick="setPreset(50,'Deep Work',this)"><div class="preset-time">50</div><div class="preset-name">deep work</div></div>
+      <div class="preset-btn" id="preset5" onclick="setPreset(5,'Break',this)"><div class="preset-time">5</div><div class="preset-name">break</div></div>
+      <div class="preset-btn" id="preset15" onclick="setPreset(15,'Long Break',this)"><div class="preset-time">15</div><div class="preset-name">long break</div></div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-ring-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle cx="80" cy="80" r="68" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="10"/>
+          <circle id="timerCircle" cx="80" cy="80" r="68" fill="none" stroke="#7C5CFC" stroke-width="10" stroke-linecap="round" stroke-dasharray="427" stroke-dashoffset="0" style="transition:stroke-dashoffset .5s linear,stroke .3s"/>
+        </svg>
+        <div class="timer-ring-inner">
+          <div class="timer-display" id="timerDisplay">25:00</div>
+          <div class="timer-mode" id="timerMode">ready</div>
+        </div>
+      </div>
+    </div>
+    <input class="timer-task-input" id="focusTaskInput" placeholder="What are you working on?">
+    <div class="timer-controls">
+      <button class="timer-btn-primary" id="timerPlayBtn" onclick="toggleTimer()">▶ Start</button>
+      <button class="timer-btn-secondary" onclick="resetTimer()">↺ Reset</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val" id="focusSessionCount">0</div><div class="stat-lbl">Sessions</div></div>
+      <div class="stat-card"><div class="stat-val" id="focusMinutesToday">0m</div><div class="stat-lbl">Today</div></div>
+      <div class="stat-card"><div class="stat-val" id="focusStreakStat">0</div><div class="stat-lbl">Day streak</div></div>
+      <div class="stat-card"><div class="stat-val" id="focusBestStat">0m</div><div class="stat-lbl">Best day</div></div>
+    </div>
+    <div class="section-hdr"><div class="section-title">// Session log</div></div>
+    <div id="focusLog"></div>
+  </div>
+
+  <!-- INSIGHTS SCREEN -->
+  <div class="screen" id="insightsScreen">
+    <div style="margin-bottom:20px">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.5px">Insights</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:3px">// AI analysis of your life</div>
+    </div>
+    <div id="insightsContent"></div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab active" id="tabToday" onclick="switchTab('today')"><span class="tab-icon">🫀</span><span class="tab-label">today</span></button>
+    <button class="tab" id="tabHabits" onclick="switchTab('habits')"><span class="tab-icon">✅</span><span class="tab-label">habits</span></button>
+    <button class="tab" id="tabMoney" onclick="switchTab('money')"><span class="tab-icon">💰</span><span class="tab-label">money</span></button>
+    <button class="tab" id="tabFocus" onclick="switchTab('focus')"><span class="tab-icon">⏱</span><span class="tab-label">focus</span></button>
+    <button class="tab" id="tabInsights" onclick="switchTab('insights')"><span class="tab-icon">🧠</span><span class="tab-label">AI</span></button>
+  </div>
+</div>
+
+<!-- CHECK-IN MODAL -->
+<div class="modal-bg" id="checkinModal" onclick="if(event.target===this)closeCheckin()">
+  <div class="modal modal-wrap">
+    <button class="modal-x" onclick="closeCheckin()">✕</button>
+    <div class="modal-handle"></div>
+    <div id="checkinContent"></div>
+  </div>
+</div>
+
+<!-- ADD HABIT MODAL -->
+<div class="modal-bg" id="habitModal" onclick="if(event.target===this)closeHabitModal()">
+  <div class="modal modal-wrap">
+    <button class="modal-x" onclick="closeHabitModal()">✕</button>
+    <div class="modal-handle"></div>
+    <div class="modal-title">New Habit</div>
+    <div class="modal-sub">What do you want to build into your daily routine?</div>
+    <div class="modal-section">
+      <div class="modal-section-label">Habit name</div>
+      <input class="modal-input" id="habitNameInput" placeholder="e.g. Drink 8 glasses of water" onkeydown="if(event.key==='Enter')saveHabit()">
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-label">Best time</div>
+      <div class="sleep-rating" style="gap:8px">
+        <div class="sleep-btn selected" id="timeAM" onclick="selectTime('AM',this)">🌅 Morning</div>
+        <div class="sleep-btn" id="timePM" onclick="selectTime('PM',this)">☀️ Afternoon</div>
+        <div class="sleep-btn" id="timeEV" onclick="selectTime('EV',this)">🌙 Evening</div>
+      </div>
+    </div>
+    <button class="modal-btn" onclick="saveHabit()">Add Habit</button>
+    <button class="modal-btn-ghost" onclick="closeHabitModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- DEBRIEF MODAL -->
+<div class="modal-bg" id="debriefModal" onclick="if(event.target===this)closeDebrief()">
+  <div class="modal modal-wrap">
+    <button class="modal-x" onclick="closeDebrief()">✕</button>
+    <div class="modal-handle"></div>
+    <div id="debriefContent"></div>
+  </div>
+</div>
+
+<!-- MOOD DETAIL MODAL -->
+<div class="modal-bg" id="moodModal" onclick="if(event.target===this)closeMoodModal()">
+  <div class="modal modal-wrap">
+    <button class="modal-x" onclick="closeMoodModal()">✕</button>
+    <div class="modal-handle"></div>
+    <div class="modal-title">Log Mood</div>
+    <div class="modal-sub">How are you feeling right now? Add a note if you want.</div>
+    <div class="modal-section">
+      <div class="modal-section-label">Mood</div>
+      <div class="mood-strip" id="moodModalStrip">
+        <div class="mood-btn" onclick="selectMoodModal(1,this)"><span class="mood-emoji">😞</span><span class="mood-label">rough</span></div>
+        <div class="mood-btn" onclick="selectMoodModal(2,this)"><span class="mood-emoji">😕</span><span class="mood-label">meh</span></div>
+        <div class="mood-btn" onclick="selectMoodModal(3,this)"><span class="mood-emoji">😐</span><span class="mood-label">okay</span></div>
+        <div class="mood-btn" onclick="selectMoodModal(4,this)"><span class="mood-emoji">🙂</span><span class="mood-label">good</span></div>
+        <div class="mood-btn" onclick="selectMoodModal(5,this)"><span class="mood-emoji">😄</span><span class="mood-label">great</span></div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-label">Note (optional)</div>
+      <textarea class="note-textarea" id="moodNoteInput" placeholder="What's on your mind?" rows="3"></textarea>
+    </div>
+    <button class="modal-btn" onclick="saveMoodModal()">Log Mood</button>
+    <button class="modal-btn-ghost" onclick="closeMoodModal()">Cancel</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_BASE = 'https://api.anthropic.com/v1/messages';
+const CLAUDE_KEY_PLACEHOLDER = 'YOUR_CLAUDE_KEY';
+
+const KEY = 'lp_v1';
+const MOODS = ['','😞','😕','😐','🙂','😄'];
+const MOOD_NAMES = ['','Rough','Meh','Okay','Good','Great'];
+const CAT_LIST = [
+  {e:'🍔',n:'Food',c:'#F5A623'},
+  {e:'🚗',n:'Transport',c:'#7C5CFC'},
+  {e:'🛍',n:'Shopping',c:'#FF6B8A'},
+  {e:'☕',n:'Coffee',c:'#B45309'},
+  {e:'🎬',n:'Entertainment',c:'#00C9A7'},
+  {e:'💊',n:'Health',c:'#4ADE80'},
+  {e:'📦',n:'Other',c:'#8B8BA0'},
+];
+
+function now(){ return Date.now(); }
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
+function timeStr(){ return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
+function monthStr(){ return new Date().toISOString().slice(0,7); }
+
+function load(){
+  try{ return JSON.parse(localStorage.getItem(KEY)) || def(); }
+  catch{ return def(); }
+}
+function def(){
+  return {
+    moods:[],habits:[],habitLog:{},expenses:[],sessions:[],
+    checkins:{},isPro:false,streak:0,lastCheckinDate:'',
+    focusStreak:0,lastFocusDate:'',setupDone:false,
+    selectedCat:'Food'
+  };
+}
+function save(s){ localStorage.setItem(KEY,JSON.stringify(s)); }
+
+let state = load();
+let timerInterval = null;
+let timerRunning = false;
+let timerSec = 25*60;
+let timerTotal = 25*60;
+let timerPreset = 'Pomodoro';
+let selectedMoodModal = 0;
+let selectedHabitTime = 'AM';
+let selectedPlanType = 'yearly';
+let debriefOpen = false;
+
+// ── INIT ─────────────────────────────────────────────────────────
+function init(){
+  if(!state.setupDone){
+    document.getElementById('onboarding').style.display='flex';
+    document.getElementById('mainApp').style.display='none';
+  } else {
+    document.getElementById('onboarding').style.display='none';
+    document.getElementById('mainApp').style.display='flex';
+    renderAll();
+  }
+  buildCatRow();
+}
+
+function startApp(){
+  state.setupDone = true;
+  save(state);
+  document.getElementById('onboarding').style.display='none';
+  document.getElementById('mainApp').style.display='flex';
+  renderAll();
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function renderAll(){
+  renderHeader();
+  renderCheckinBanner();
+  renderInsight();
+  renderStats();
+  renderTodayHabits();
+  renderRecentExpenses();
+  renderHabitsScreen();
+  renderExpenseScreen();
+  renderFocusScreen();
+  renderInsightsScreen();
+}
+
+function renderHeader(){
+  const h = new Date().getHours();
+  const greet = h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('hdrGreeting').textContent = greet;
+  document.getElementById('hdrDate').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('streakCount').textContent = state.streak || 0;
+  document.getElementById('proBadge').style.display = state.isPro ? 'block' : 'none';
+}
+
+function renderCheckinBanner(){
+  const banner = document.getElementById('checkinBanner');
+  const today = todayStr();
+  const ci = state.checkins[today] || {};
+  const h = new Date().getHours();
+  
+  let needsCheckin = false;
+  let title = '', sub = '';
+  
+  if(!ci.morning && h >= 5 && h < 12){
+    needsCheckin = true; title = '🌅 Morning check-in ready'; sub = 'How did you sleep? What are your intentions?';
+  } else if(!ci.afternoon && h >= 12 && h < 17){
+    needsCheckin = true; title = '☀️ Afternoon check-in'; sub = 'Quick mood check — takes 30 seconds';
+  } else if(!ci.evening && h >= 17){
+    needsCheckin = true; title = '🌙 Evening wrap-up ready'; sub = 'Reflect on your day — AI will analyze tonight';
+  }
+  
+  if(needsCheckin){
+    banner.style.display = 'flex';
+    document.getElementById('checkinTitle').textContent = title;
+    document.getElementById('checkinSub').textContent = sub;
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function renderInsight(){
+  const el = document.getElementById('insightText');
+  const moods = state.moods.filter(m=>m.date===todayStr());
+  const habits = state.habits;
+  const today = todayStr();
+  const log = state.habitLog[today] || {};
+  const done = habits.filter(h=>log[h.id]).length;
+  const expenses = state.expenses.filter(e=>e.date===today);
+  const totalSpent = expenses.reduce((s,e)=>s+e.amount,0);
+  
+  if(state.moods.length < 3){
+    el.innerHTML = '<div class="insight-empty">Complete your first check-in to get personalized insights. The more you log, the smarter your coach gets. ✨</div>';
+    return;
+  }
+  
+  const avgMood = moods.length ? (moods.reduce((s,m)=>s+m.level,0)/moods.length).toFixed(1) : null;
+  const habitPct = habits.length ? Math.round((done/habits.length)*100) : 0;
+  
+  let insights = [];
+  
+  if(avgMood && avgMood >= 4){
+    insights.push(`Your mood is <span class="insight-highlight">${avgMood}/5 today</span> — that puts you in the top of your recent range. 🌟`);
+  } else if(avgMood && avgMood <= 2){
+    insights.push(`Mood is <span class="insight-highlight">lower than usual today</span>. Check if you skipped any habits or got less sleep.`);
+  }
+  
+  if(habitPct === 100 && habits.length > 0){
+    insights.push(`All <span class="insight-highlight">${habits.length} habits complete</span> today — this is one of your best days. Keep it going. 🔥`);
+  } else if(habitPct < 50 && habits.length > 0){
+    insights.push(`Only <span class="insight-highlight">${habitPct}% of habits done</span>. Your data shows mood is usually higher on days you hit 80%+.`);
+  }
+  
+  if(totalSpent > 50){
+    insights.push(`Spending is <span class="insight-highlight">$${totalSpent.toFixed(2)} today</span>. Your highest spend days tend to correlate with lower mood scores.`);
+  }
+  
+  const patterns = detectPatterns();
+  if(patterns.length > 0) insights.push(patterns[0]);
+  
+  if(insights.length === 0){
+    insights.push(`You have <span class="insight-highlight">${state.moods.length} mood entries</span> logged. Keep checking in — patterns emerge after 7+ days of data. 📈`);
+  }
+  
+  el.innerHTML = insights.join('<br><br>');
+}
+
+function detectPatterns(){
+  const patterns = [];
+  if(state.moods.length < 7) return patterns;
+  
+  const last14 = [...state.moods].slice(-14);
+  const highMoodDays = last14.filter(m=>m.level>=4).map(m=>m.date);
+  const lowMoodDays = last14.filter(m=>m.level<=2).map(m=>m.date);
+  
+  let highHabitCompletion = 0, lowHabitCompletion = 0;
+  highMoodDays.forEach(date=>{
+    const log = state.habitLog[date]||{};
+    const done = Object.values(log).filter(Boolean).length;
+    highHabitCompletion += state.habits.length > 0 ? done/state.habits.length : 0;
+  });
+  
+  if(highMoodDays.length > 2 && highHabitCompletion/highMoodDays.length > 0.7){
+    patterns.push(`Pattern detected: On your <span class="insight-highlight">best mood days</span>, you complete 70%+ of your habits. The data is clear — your habits drive your mood.`);
+  }
+  
+  const highSpendLowMood = lowMoodDays.filter(date=>{
+    const daySpend = state.expenses.filter(e=>e.date===date).reduce((s,e)=>s+e.amount,0);
+    return daySpend > 30;
+  });
+  
+  if(highSpendLowMood.length >= 2){
+    patterns.push(`Pattern detected: You tend to <span class="insight-highlight">spend more on low mood days</span>. Emotional spending might be worth watching.`);
+  }
+  
+  return patterns;
+}
+
+function renderStats(){
+  const today = todayStr();
+  const moods = state.moods.filter(m=>m.date===today);
+  const avgMood = moods.length ? (moods.reduce((s,m)=>s+m.level,0)/moods.length) : null;
+  const log = state.habitLog[today]||{};
+  const done = state.habits.filter(h=>log[h.id]).length;
+  const pct = state.habits.length ? Math.round((done/state.habits.length)*100) : 0;
+  const expenses = state.expenses.filter(e=>e.date===today);
+  const total = expenses.reduce((s,e)=>s+e.amount,0);
+  const sessions = state.sessions.filter(s=>s.date===today);
+  const focusMins = sessions.reduce((s,x)=>s+x.mins,0);
+  
+  document.getElementById('statMood').textContent = avgMood ? MOODS[Math.round(avgMood)] : '—';
+  document.getElementById('statHabits').textContent = pct+'%';
+  document.getElementById('statSpend').textContent = '$'+total.toFixed(0);
+  document.getElementById('statFocus').textContent = focusMins+'m';
+}
+
+function renderTodayHabits(){
+  const el = document.getElementById('todayHabits');
+  const today = todayStr();
+  const log = state.habitLog[today]||{};
+  
+  if(!state.habits.length){
+    el.innerHTML = '<div class="empty-state" style="padding:20px 0"><div class="empty-icon">✅</div><div class="empty-title">No habits yet</div><div class="empty-sub">Add your first habit in the Habits tab</div></div>';
+    return;
+  }
+  
+  const show = state.habits.slice(0,3);
+  el.innerHTML = show.map(h=>`
+    <div class="habit-card">
+      <div class="habit-check ${log[h.id]?'done':''}" onclick="toggleHabitToday(${h.id})">${log[h.id]?'✓':''}</div>
+      <div class="habit-info">
+        <div class="habit-name ${log[h.id]?'done':''}">${h.name}</div>
+        ${h.streak>1?`<div class="habit-streak">🔥 ${h.streak} day streak</div>`:''}
+      </div>
+      <div class="habit-time">${h.time||'anytime'}</div>
+    </div>`).join('');
+}
+
+function renderRecentExpenses(){
+  const el = document.getElementById('recentExpenses');
+  const today = todayStr();
+  const recent = state.expenses.filter(e=>e.date===today).slice(0,3);
+  
+  if(!recent.length){
+    el.innerHTML = '<div style="font-size:12px;color:var(--light);padding:8px 0">No expenses logged today</div>';
+    return;
+  }
+  el.innerHTML = recent.map(e=>{
+    const cat = CAT_LIST.find(c=>c.n===e.cat)||CAT_LIST[6];
+    return `<div class="expense-card">
+      <div class="expense-icon" style="background:${cat.c}22">${cat.e}</div>
+      <div class="expense-info"><div class="expense-desc">${e.desc}</div><div class="expense-meta">${cat.n} · ${e.time}</div></div>
+      <div class="expense-amount">-$${e.amount.toFixed(2)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderHabitsScreen(){
+  const today = todayStr();
+  const log = state.habitLog[today]||{};
+  const done = state.habits.filter(h=>log[h.id]).length;
+  const pct = state.habits.length ? Math.round((done/state.habits.length)*100) : 0;
+  
+  document.getElementById('habitProgressBar').style.width = pct+'%';
+  document.getElementById('habitProgressText').textContent = `${done} of ${state.habits.length} completed`;
+  document.getElementById('habitStreakText').textContent = pct===100&&state.habits.length>0?'🔥 All done!':'';
+  
+  const el = document.getElementById('allHabits');
+  if(!state.habits.length){
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-title">No habits yet</div><div class="empty-sub">Add your first habit below</div></div>';
+    return;
+  }
+  el.innerHTML = state.habits.map(h=>`
+    <div class="habit-card">
+      <div class="habit-check ${log[h.id]?'done':''}" onclick="toggleHabitFull(${h.id})">${log[h.id]?'✓':''}</div>
+      <div class="habit-info">
+        <div class="habit-name ${log[h.id]?'done':''}">${h.name}</div>
+        <div style="display:flex;gap:8px;margin-top:2px">
+          ${h.streak>0?`<div class="habit-streak">🔥 ${h.streak} day streak</div>`:''}
+          <div class="habit-time">${h.time||'anytime'}</div>
+        </div>
+      </div>
+      <button onclick="deleteHabit(${h.id})" style="background:none;border:none;color:var(--light);cursor:pointer;font-size:16px;padding:4px 8px">×</button>
+    </div>`).join('');
+  
+  const weekEl = document.getElementById('weeklyHabits');
+  const days = [];
+  for(let i=6;i>=0;i--){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    days.push(d.toISOString().split('T')[0]);
+  }
+  weekEl.innerHTML = `<div style="display:flex;gap:6px;margin-bottom:8px">
+    ${days.map(d=>{
+      const dl = state.habitLog[d]||{};
+      const dc = state.habits.filter(h=>dl[h.id]).length;
+      const dp = state.habits.length ? dc/state.habits.length : 0;
+      const dayName = new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short'}).slice(0,1);
+      const isToday = d===today;
+      return `<div style="flex:1;text-align:center">
+        <div style="font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px">${dayName}</div>
+        <div style="width:32px;height:32px;border-radius:8px;margin:0 auto;background:${dp>=1?'var(--accent)':dp>0?'rgba(124,92,252,0.3)':'var(--surface2)'};border:${isToday?'2px solid var(--accent)':'1px solid var(--border)'};display:flex;align-items:center;justify-content:center;font-size:10px;color:${dp>=1?'#fff':'var(--muted)'}">
+          ${dp>=1?'✓':dp>0?Math.round(dp*100)+'%':'·'}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderExpenseScreen(){
+  const today = todayStr();
+  const month = monthStr();
+  const todayExp = state.expenses.filter(e=>e.date===today);
+  const monthExp = state.expenses.filter(e=>e.date&&e.date.startsWith(month));
+  
+  document.getElementById('todayTotal').textContent = '$'+todayExp.reduce((s,e)=>s+e.amount,0).toFixed(2);
+  document.getElementById('monthTotal').textContent = '$'+monthExp.reduce((s,e)=>s+e.amount,0).toFixed(2);
+  
+  const el = document.getElementById('expenseList');
+  if(!todayExp.length){
+    el.innerHTML = '<div class="empty-state" style="padding:20px 0"><div class="empty-icon">💰</div><div class="empty-title">No expenses today</div><div class="empty-sub">Log your first expense above</div></div>';
+    return;
+  }
+  el.innerHTML = todayExp.map(e=>{
+    const cat = CAT_LIST.find(c=>c.n===e.cat)||CAT_LIST[6];
+    return `<div class="expense-card">
+      <div class="expense-icon" style="background:${cat.c}22">${cat.e}</div>
+      <div class="expense-info"><div class="expense-desc">${e.desc}</div><div class="expense-meta">${cat.n} · ${e.time}</div></div>
+      <div class="expense-amount">-$${e.amount.toFixed(2)}</div>
+      <button class="expense-del" onclick="deleteExpense(${e.id})">×</button>
+    </div>`;
+  }).join('');
+}
+
+function renderFocusScreen(){
+  const today = todayStr();
+  const sessions = state.sessions.filter(s=>s.date===today);
+  const totalMins = sessions.reduce((s,x)=>s+x.mins,0);
+  
+  document.getElementById('focusSessionCount').textContent = sessions.length;
+  document.getElementById('focusMinutesToday').textContent = totalMins+'m';
+  document.getElementById('focusStreakStat').textContent = state.focusStreak||0;
+  
+  const allDays = {};
+  state.sessions.forEach(s=>{
+    if(!allDays[s.date]) allDays[s.date]=0;
+    allDays[s.date]+=s.mins;
+  });
+  const best = Math.max(0,...Object.values(allDays));
+  document.getElementById('focusBestStat').textContent = best+'m';
+  
+  const el = document.getElementById('focusLog');
+  if(!sessions.length){
+    el.innerHTML = '<div class="empty-state" style="padding:16px 0"><div class="empty-icon">⏱</div><div class="empty-title">No sessions yet</div><div class="empty-sub">Complete a session to see it here</div></div>';
+    return;
+  }
+  el.innerHTML = sessions.map(s=>`
+    <div class="session-log-item">
+      <div class="session-task-name">${s.task}</div>
+      <div class="session-meta">${s.mins}m · ${s.time}</div>
+    </div>`).join('');
+}
+
+function renderInsightsScreen(){
+  const el = document.getElementById('insightsContent');
+  
+  if(state.moods.length < 5){
+    el.innerHTML = `
+      <div class="debrief-card" style="text-align:center;padding:32px 20px">
+        <div style="font-size:48px;margin-bottom:16px">🔮</div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:8px">Building your profile</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7">Log your mood, habits, and expenses for 5+ days and your AI coach will start detecting patterns and giving you personalized insights.</div>
+        <div style="margin-top:20px;background:var(--surface2);border-radius:var(--rs);padding:12px;font-size:12px;color:var(--muted)">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Mood entries</span><span style="color:var(--accent3)">${state.moods.length} / 5 needed</span></div>
+          <div style="background:var(--surface);border-radius:99px;height:4px"><div style="background:var(--accent);border-radius:99px;height:100%;width:${Math.min(100,state.moods.length/5*100)}%;transition:width .5s"></div></div>
+        </div>
+      </div>`;
+    return;
+  }
+  
+  const patterns = detectPatterns();
+  const moodData = buildMoodChart();
+  const today = todayStr();
+  const moods = state.moods.filter(m=>m.date===today);
+  const avgMood = moods.length ? (moods.reduce((s,m)=>s+m.level,0)/moods.length) : null;
+  
+  const last7 = [];
+  for(let i=6;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    last7.push(d.toISOString().split('T')[0]);
+  }
+  
+  el.innerHTML = `
+    <div class="insight-full-card">
+      <div class="insight-full-header">
+        <div class="insight-full-icon" style="background:var(--accent-bg)">📊</div>
+        <div><div class="insight-full-title">7-Day Mood Trend</div><div class="insight-full-sub">Your recent emotional pattern</div></div>
+      </div>
+      <div class="chart-bar-wrap">
+        ${last7.map(d=>{
+          const dm = state.moods.filter(m=>m.date===d);
+          const avg = dm.length ? dm.reduce((s,m)=>s+m.level,0)/dm.length : 0;
+          const pct = avg/5*100;
+          const color = avg>=4?'var(--green)':avg>=3?'var(--accent)':avg>=2?'var(--amber)':'var(--rose)';
+          const dayName = new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short'});
+          return `<div class="chart-bar-row">
+            <div class="chart-bar-label">${dayName}</div>
+            <div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+            <div class="chart-bar-val">${avg?MOODS[Math.round(avg)]:'—'}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    ${patterns.length>0?`
+    <div class="insight-full-card">
+      <div class="insight-full-header">
+        <div class="insight-full-icon" style="background:var(--teal-bg)">🔮</div>
+        <div><div class="insight-full-title">Patterns Detected</div><div class="insight-full-sub">AI found these in your data</div></div>
+      </div>
+      ${patterns.map(pt=>`<div class="pattern-alert"><div class="pattern-alert-text">${pt}</div></div>`).join('')}
+    </div>`:``}
+
+    <div class="insight-full-card">
+      <div class="insight-full-header">
+        <div class="insight-full-icon" style="background:var(--amber-bg)">💡</div>
+        <div><div class="insight-full-title">Today's Summary</div><div class="insight-full-sub">Your day at a glance</div></div>
+      </div>
+      ${[
+        ['Avg mood today', avgMood ? MOODS[Math.round(avgMood)]+' '+MOOD_NAMES[Math.round(avgMood)] : 'Not logged', avgMood>=4?'var(--green)':avgMood>=3?'var(--accent)':'var(--rose)'],
+        ['Habits completed', (() => {const l=state.habitLog[today]||{};const d=state.habits.filter(h=>l[h.id]).length;return d+'/'+state.habits.length;})(), 'var(--text)'],
+        ['Money spent', '$'+state.expenses.filter(e=>e.date===today).reduce((s,e)=>s+e.amount,0).toFixed(2), 'var(--rose)'],
+        ['Focus minutes', state.sessions.filter(s=>s.date===today).reduce((s,x)=>s+x.mins,0)+'m', 'var(--teal)'],
+      ].map(([l,v,c])=>`<div class="debrief-metric"><div class="debrief-metric-label">${l}</div><div class="debrief-metric-val" style="color:${c}">${v}</div></div>`).join('')}
+    </div>
+
+    ${!state.isPro?`
+    <div style="background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:var(--r);padding:20px;text-align:center;margin-bottom:14px">
+      <div style="font-size:24px;margin-bottom:10px">🧠</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:6px">Unlock AI Daily Debrief</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px">Pro members get a personalized evening analysis connecting all their data — mood, habits, money, and focus — with specific actions for tomorrow.</div>
+      <button onclick="openUpgrade()" style="background:linear-gradient(135deg,#7C5CFC,#9B7FFF);border:none;border-radius:var(--rs);padding:12px 24px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#fff;cursor:pointer">Upgrade to Pro — $4.99/mo</button>
+    </div>`:``}
+  `;
+}
+
+function buildMoodChart(){ return []; }
+
+// ── MOOD ─────────────────────────────────────────────────────────
+function quickMood(level, el){
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  const entry = {level, emoji:MOODS[level], name:MOOD_NAMES[level], note:'', time:timeStr(), date:todayStr(), id:now()};
+  state.moods.push(entry);
+  save(state);
+  updateStreak();
+  renderStats();
+  renderInsight();
+  renderInsightsScreen();
+  showToast(MOODS[level]+' Mood logged');
+}
+
+function openMoodModal(){ document.getElementById('moodModal').classList.add('open'); selectedMoodModal=0; }
+function closeMoodModal(){ document.getElementById('moodModal').classList.remove('open'); document.getElementById('moodNoteInput').value=''; selectedMoodModal=0; document.querySelectorAll('#moodModalStrip .mood-btn').forEach(b=>b.classList.remove('selected')); }
+function selectMoodModal(level, el){ selectedMoodModal=level; document.querySelectorAll('#moodModalStrip .mood-btn').forEach(b=>b.classList.remove('selected')); el.classList.add('selected'); }
+function saveMoodModal(){
+  if(!selectedMoodModal){ showToast('Please select a mood first'); return; }
+  const note = document.getElementById('moodNoteInput').value.trim();
+  const entry = {level:selectedMoodModal, emoji:MOODS[selectedMoodModal], name:MOOD_NAMES[selectedMoodModal], note, time:timeStr(), date:todayStr(), id:now()};
+  state.moods.push(entry);
+  save(state);
+  updateStreak();
+  closeMoodModal();
+  renderStats();
+  renderInsight();
+  renderInsightsScreen();
+  showToast(MOODS[selectedMoodModal]+' Mood logged');
+}
+
+// ── HABITS ───────────────────────────────────────────────────────
+function openAddHabit(){ document.getElementById('habitNameInput').value=''; selectedHabitTime='AM'; document.querySelectorAll('.sleep-btn').forEach(b=>b.classList.remove('selected')); document.getElementById('timeAM').classList.add('selected'); document.getElementById('habitModal').classList.add('open'); setTimeout(()=>document.getElementById('habitNameInput').focus(),300); }
+function closeHabitModal(){ document.getElementById('habitModal').classList.remove('open'); }
+function selectTime(t, el){ selectedHabitTime=t; document.querySelectorAll('.sleep-btn').forEach(b=>b.classList.remove('selected')); el.classList.add('selected'); }
+function saveHabit(){
+  const name = document.getElementById('habitNameInput').value.trim();
+  if(!name){ showToast('Enter a habit name'); return; }
+  if(!state.isPro && state.habits.length>=5){ openUpgrade(); return; }
+  const timeMap = {AM:'morning',PM:'afternoon',EV:'evening'};
+  state.habits.push({id:now(), name, time:timeMap[selectedHabitTime], streak:0, created:todayStr()});
+  save(state);
+  closeHabitModal();
+  renderHabitsScreen();
+  renderTodayHabits();
+  showToast('Habit added!');
+}
+function deleteHabit(id){ if(!confirm('Delete this habit?')) return; state.habits=state.habits.filter(h=>h.id!==id); save(state); renderHabitsScreen(); renderTodayHabits(); }
+function toggleHabitToday(id){ toggleHabitOn(id); renderTodayHabits(); renderStats(); renderInsight(); }
+function toggleHabitFull(id){ toggleHabitOn(id); renderHabitsScreen(); renderTodayHabits(); renderStats(); renderInsight(); }
+function toggleHabitOn(id){
+  const today = todayStr();
+  if(!state.habitLog[today]) state.habitLog[today]={};
+  const was = state.habitLog[today][id];
+  state.habitLog[today][id] = !was;
+  const habit = state.habits.find(h=>h.id===id);
+  if(habit){
+    if(!was) habit.streak=(habit.streak||0)+1;
+    else habit.streak=Math.max(0,(habit.streak||1)-1);
+  }
+  save(state);
+  updateStreak();
+  if(!was) showToast('✓ Habit done!');
+}
+
+// ── EXPENSES ─────────────────────────────────────────────────────
+function buildCatRow(){
+  const el = document.getElementById('catRow');
+  if(!el) return;
+  el.innerHTML = CAT_LIST.map(c=>`<div class="cat-pill ${c.n===state.selectedCat?'selected':''}" onclick="selectCat('${c.n}',this)">${c.e} ${c.n}</div>`).join('');
+}
+function selectCat(name, el){ state.selectedCat=name; document.querySelectorAll('.cat-pill').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); }
+function addExpense(){
+  const desc = document.getElementById('expDescInput').value.trim();
+  const amt = parseFloat(document.getElementById('expAmtInput').value);
+  if(!desc||!amt||amt<=0){ showToast('Enter description and amount'); return; }
+  state.expenses.unshift({id:now(), desc, amount:amt, cat:state.selectedCat, date:todayStr(), time:timeStr()});
+  save(state);
+  document.getElementById('expDescInput').value='';
+  document.getElementById('expAmtInput').value='';
+  renderExpenseScreen();
+  renderRecentExpenses();
+  renderStats();
+  renderInsight();
+  showToast('$'+amt.toFixed(2)+' logged!');
+}
+function deleteExpense(id){ state.expenses=state.expenses.filter(e=>e.id!==id); save(state); renderExpenseScreen(); renderRecentExpenses(); renderStats(); }
+
+// ── FOCUS TIMER ──────────────────────────────────────────────────
+function setPreset(mins, name, el){
+  if(timerRunning) return;
+  timerSec=mins*60; timerTotal=mins*60; timerPreset=name;
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  updateTimerDisplay();
+}
+function updateTimerDisplay(){
+  const m=Math.floor(timerSec/60).toString().padStart(2,'0');
+  const s=(timerSec%60).toString().padStart(2,'0');
+  document.getElementById('timerDisplay').textContent=`${m}:${s}`;
+  const pct=1-(timerSec/timerTotal);
+  const circ=427;
+  document.getElementById('timerCircle').style.strokeDashoffset=circ-pct*circ;
+  if(timerSec<60) document.getElementById('timerCircle').style.stroke='var(--rose)';
+  else if(timerSec<timerTotal*0.3) document.getElementById('timerCircle').style.stroke='var(--amber)';
+  else document.getElementById('timerCircle').style.stroke='#7C5CFC';
+}
+function toggleTimer(){
+  if(timerRunning){
+    clearInterval(timerInterval); timerRunning=false;
+    document.getElementById('timerPlayBtn').textContent='▶ Resume';
+    document.getElementById('timerMode').textContent='paused';
+  } else {
+    timerRunning=true;
+    document.getElementById('timerPlayBtn').textContent='⏸ Pause';
+    document.getElementById('timerMode').textContent=timerPreset.toLowerCase();
+    timerInterval=setInterval(()=>{
+      timerSec--;
+      updateTimerDisplay();
+      if(timerSec<=0){ clearInterval(timerInterval); timerRunning=false; completeSession(); }
+    },1000);
+  }
+}
+function resetTimer(){
+  clearInterval(timerInterval); timerRunning=false;
+  timerSec=timerTotal;
+  document.getElementById('timerPlayBtn').textContent='▶ Start';
+  document.getElementById('timerMode').textContent='ready';
+  document.getElementById('timerCircle').style.stroke='#7C5CFC';
+  updateTimerDisplay();
+}
+function completeSession(){
+  const task=document.getElementById('focusTaskInput').value.trim()||timerPreset;
+  const mins=Math.round(timerTotal/60);
+  const session={task, mins, date:todayStr(), time:timeStr(), id:now()};
+  state.sessions.unshift(session);
+  const today=todayStr();
+  if(state.lastFocusDate!==today){
+    const yesterday=new Date(); yesterday.setDate(yesterday.getDate()-1);
+    const yStr=yesterday.toISOString().split('T')[0];
+    state.focusStreak=state.lastFocusDate===yStr?(state.focusStreak||0)+1:1;
+    state.lastFocusDate=today;
+  }
+  save(state);
+  document.getElementById('timerPlayBtn').textContent='▶ Start';
+  document.getElementById('timerMode').textContent='complete!';
+  renderFocusScreen();
+  renderStats();
+  showToast('🎉 '+mins+'min session complete!');
+  timerSec=timerTotal;
+  setTimeout(updateTimerDisplay,100);
+}
+
+// ── CHECK-IN ─────────────────────────────────────────────────────
+function openCheckin(){
+  const h=new Date().getHours();
+  const today=todayStr();
+  const ci=state.checkins[today]||{};
+  let type='morning';
+  if(h>=12&&h<17&&!ci.afternoon) type='afternoon';
+  else if(h>=17&&!ci.evening) type='evening';
+  else if(ci.morning&&!ci.afternoon) type='afternoon';
+  else if(ci.afternoon&&!ci.evening) type='evening';
+  buildCheckinContent(type);
+  document.getElementById('checkinModal').classList.add('open');
+}
+function closeCheckin(){ document.getElementById('checkinModal').classList.remove('open'); }
+
+function buildCheckinContent(type){
+  const el=document.getElementById('checkinContent');
+  const intentions=['Exercise','Eat well','Drink water','Work focused','Rest well','Be present','Read','Connect with family'];
+  
+  if(type==='morning'){
+    el.innerHTML=`
+      <div class="modal-title">🌅 Morning Check-in</div>
+      <div class="modal-sub">Start your day with intention. Takes less than 60 seconds.</div>
+      <div class="modal-section">
+        <div class="modal-section-label">How did you sleep?</div>
+        <div class="sleep-rating" id="sleepRating">
+          ${[1,2,3,4,5].map(n=>`<div class="sleep-btn" onclick="selectSleep(${n},this)">${n}</div>`).join('')}
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Today's intentions (pick up to 3)</div>
+        <div class="intention-pills" id="intentionPills">
+          ${intentions.map(i=>`<div class="intention-pill" onclick="toggleIntention(this)">${i}</div>`).join('')}
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">One thing you're grateful for</div>
+        <input class="modal-input" id="gratefulInput" placeholder="e.g. Good health, my family...">
+      </div>
+      <button class="modal-btn" onclick="saveMorningCheckin()">Start My Day</button>
+    `;
+  } else if(type==='afternoon'){
+    el.innerHTML=`
+      <div class="modal-title">☀️ Afternoon Check-in</div>
+      <div class="modal-sub">Quick pulse check on your day so far.</div>
+      <div class="modal-section">
+        <div class="modal-section-label">How are you feeling right now?</div>
+        <div class="mood-strip" id="ciMoodStrip">
+          ${[1,2,3,4,5].map(n=>`<div class="mood-btn" onclick="selectCiMood(${n},this)"><span class="mood-emoji">${MOODS[n]}</span><span class="mood-label">${MOOD_NAMES[n].toLowerCase()}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Have you had enough water today?</div>
+        <div class="water-toggle">
+          <div class="water-btn" id="waterYes" onclick="selectWater('yes')">💧 Yes!</div>
+          <div class="water-btn" id="waterNo" onclick="selectWater('no')">Not yet</div>
+        </div>
+      </div>
+      <button class="modal-btn" onclick="saveAfternoonCheckin()">Save Check-in</button>
+    `;
+  } else {
+    el.innerHTML=`
+      <div class="modal-title">🌙 Evening Wrap-up</div>
+      <div class="modal-sub">Reflect on your day. Your AI coach will analyze this tonight.</div>
+      <div class="modal-section">
+        <div class="modal-section-label">Overall mood today</div>
+        <div class="mood-strip" id="evMoodStrip">
+          ${[1,2,3,4,5].map(n=>`<div class="mood-btn" onclick="selectEvMood(${n},this)"><span class="mood-emoji">${MOODS[n]}</span><span class="mood-label">${MOOD_NAMES[n].toLowerCase()}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Energy level today</div>
+        <div class="sleep-rating" id="energyRating">
+          ${[1,2,3,4,5].map(n=>`<div class="sleep-btn" onclick="selectEnergy(${n},this)">${n}</div>`).join('')}
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">One win from today</div>
+        <input class="modal-input" id="winInput" placeholder="Something you accomplished or enjoyed...">
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Stress level today</div>
+        <div class="sleep-rating" id="stressRating">
+          ${[1,2,3,4,5].map(n=>`<div class="sleep-btn" onclick="selectStress(${n},this)">${n}</div>`).join('')}
+        </div>
+      </div>
+      <button class="modal-btn" onclick="saveEveningCheckin()">Complete Day</button>
+    `;
+  }
+}
+
+let ciSleep=0, ciMood=0, ciWater=null, ciEnergy=0, ciStress=0;
+
+function selectSleep(n,el){ ciSleep=n; document.querySelectorAll('#sleepRating .sleep-btn').forEach(b=>b.classList.remove('selected')); el.classList.add('selected'); }
+function selectCiMood(n,el){ ciMood=n; document.querySelectorAll('#ciMoodStrip .mood-btn').forEach(b=>b.classList.remove('selected')); el.classList.add('selected'); }
+function selectEvMood(n,el){ ciMood=n; document.querySelectorAll('#evMoodStrip .mood-btn').forEach(b=>b.classList.remove('selected')); el.classList.add('selected'); }
+function selectEnergy(n,el){ ciEnergy=n; document.querySelectorAll('#energyRating .sleep-btn').forEach(b=>b.classList.remove('selected')); el.classList.add('selected'); }
+function selectStress(n,el){ ciStress=n; document.querySelectorAll('#stressRating .sleep-btn').forEach(b=>b.classList.remove('selected')); el.classList.add('selected'); }
+function selectWater(v){ ciWater=v; document.getElementById('waterYes').classList.toggle('yes',v==='yes'); document.getElementById('waterNo').classList.toggle('no',v==='no'); }
+function toggleIntention(el){ const selected=document.querySelectorAll('#intentionPills .intention-pill.selected'); if(!el.classList.contains('selected')&&selected.length>=3){ showToast('Pick up to 3 intentions'); return; } el.classList.toggle('selected'); }
+
+function saveMorningCheckin(){
+  const today=todayStr();
+  if(!state.checkins[today]) state.checkins[today]={};
+  const intentions=[...document.querySelectorAll('#intentionPills .intention-pill.selected')].map(el=>el.textContent);
+  const grateful=document.getElementById('gratefulInput')?.value.trim()||'';
+  state.checkins[today].morning={sleep:ciSleep, intentions, grateful, time:timeStr()};
+  if(ciSleep>0){
+    state.moods.push({level:ciSleep>=4?4:ciSleep>=3?3:2, emoji:MOODS[ciSleep>=4?4:3], name:'Morning', note:'Sleep: '+ciSleep+'/5', time:timeStr(), date:today, id:now()});
+  }
+  save(state);
+  updateStreak();
+  closeCheckin();
+  renderCheckinBanner();
+  renderStats();
+  renderInsight();
+  renderInsightsScreen();
+  showToast('🌅 Morning check-in done!');
+  ciSleep=0;
+}
+
+function saveAfternoonCheckin(){
+  if(!ciMood){ showToast('Select your mood'); return; }
+  const today=todayStr();
+  if(!state.checkins[today]) state.checkins[today]={};
+  state.checkins[today].afternoon={mood:ciMood, water:ciWater, time:timeStr()};
+  state.moods.push({level:ciMood, emoji:MOODS[ciMood], name:MOOD_NAMES[ciMood], note:'Afternoon check-in'+(ciWater?', water: '+ciWater:''), time:timeStr(), date:today, id:now()});
+  save(state);
+  updateStreak();
+  closeCheckin();
+  renderCheckinBanner();
+  renderStats();
+  renderInsight();
+  renderInsightsScreen();
+  showToast('☀️ Afternoon check-in done!');
+  ciMood=0; ciWater=null;
+}
+
+function saveEveningCheckin(){
+  if(!ciMood){ showToast('Select your mood'); return; }
+  const today=todayStr();
+  if(!state.checkins[today]) state.checkins[today]={};
+  const win=document.getElementById('winInput')?.value.trim()||'';
+  state.checkins[today].evening={mood:ciMood, energy:ciEnergy, stress:ciStress, win, time:timeStr()};
+  state.moods.push({level:ciMood, emoji:MOODS[ciMood], name:MOOD_NAMES[ciMood], note:'Evening wrap-up'+(win?' · Win: '+win:''), time:timeStr(), date:today, id:now()});
+  save(state);
+  updateStreak();
+  closeCheckin();
+  renderCheckinBanner();
+  renderStats();
+  renderInsight();
+  renderInsightsScreen();
+  showToast('🌙 Day complete! Great job.');
+  ciMood=0; ciEnergy=0; ciStress=0;
+}
+
+// ── DEBRIEF ──────────────────────────────────────────────────────
+function openDebrief(){
+  debriefOpen=true;
+  document.getElementById('debriefModal').classList.add('open');
+  buildDebriefContent();
+}
+function closeDebrief(){ document.getElementById('debriefModal').classList.remove('open'); debriefOpen=false; }
+
+function buildDebriefContent(){
+  const el=document.getElementById('debriefContent');
+  const today=todayStr();
+  const moods=state.moods.filter(m=>m.date===today);
+  const log=state.habitLog[today]||{};
+  const done=state.habits.filter(h=>log[h.id]).length;
+  const expenses=state.expenses.filter(e=>e.date===today);
+  const totalSpent=expenses.reduce((s,e)=>s+e.amount,0);
+  const sessions=state.sessions.filter(s=>s.date===today);
+  const focusMins=sessions.reduce((s,x)=>s+x.mins,0);
+  const avgMood=moods.length?(moods.reduce((s,m)=>s+m.level,0)/moods.length):null;
+  const ci=state.checkins[today]||{};
+  
+  const patterns=detectPatterns();
+  
+  let insight='';
+  if(avgMood&&done>=state.habits.length*0.8&&state.habits.length>0){
+    insight=`Excellent day. Your mood averaged ${avgMood.toFixed(1)}/5 and you completed ${done}/${state.habits.length} habits. Your data consistently shows that habit completion above 80% drives your best mood scores. Keep this momentum.`;
+  } else if(avgMood&&avgMood<3){
+    insight=`Tough day — mood averaged ${avgMood.toFixed(1)}/5. Looking at your patterns, low mood days often follow poor sleep or skipped habits. Tonight, focus on getting good rest. Tomorrow, start with just one habit first thing in the morning.`;
+  } else if(focusMins>90){
+    insight=`Solid focus day — ${focusMins} minutes of deep work. Your productivity data shows you perform best when you front-load focused work before noon. Keep that pattern going.`;
+  } else {
+    insight=`Today's data is logged. ${moods.length} mood entries, ${done}/${state.habits.length} habits, $${totalSpent.toFixed(2)} spent, ${focusMins}min focused. Keep logging — the more data you give me, the more specific my insights become.`;
+  }
+  
+  const cats={};
+  expenses.forEach(e=>{cats[e.cat]=(cats[e.cat]||0)+e.amount;});
+  const topCat=Object.keys(cats).sort((a,b)=>cats[b]-cats[a])[0];
+  
+  let tomorrowTips=[];
+  if(avgMood&&avgMood<3) tomorrowTips.push('Prioritize sleep tonight — aim for 7+ hours');
+  if(done<state.habits.length*0.5&&state.habits.length>0) tomorrowTips.push('Start tomorrow with your first habit before checking your phone');
+  if(totalSpent>40) tomorrowTips.push('Try the 10-minute rule before any purchase tomorrow');
+  if(focusMins<30) tomorrowTips.push('Block one 25-minute Pomodoro session first thing tomorrow');
+  if(tomorrowTips.length===0) tomorrowTips=['Continue what you did today — the data shows it is working'];
+  
+  el.innerHTML=`
+    <div class="modal-title">🧠 AI Daily Debrief</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:20px;letter-spacing:.5px">${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}).toUpperCase()}</div>
+    
+    <div class="debrief-section">
+      <div class="debrief-section-title">Your day in numbers</div>
+      ${[
+        ['Avg mood',avgMood?MOODS[Math.round(avgMood)]+' '+MOOD_NAMES[Math.round(avgMood)]:'No entries',avgMood>=4?'var(--green)':avgMood>=3?'var(--accent)':avgMood?'var(--rose)':'var(--muted)'],
+        ['Habits done',done+'/'+state.habits.length+(done===state.habits.length&&state.habits.length>0?' 🔥':''),'var(--text)'],
+        ['Money spent','$'+totalSpent.toFixed(2)+(topCat?' on '+topCat:''),'var(--rose)'],
+        ['Focus time',focusMins+'min'+(sessions.length?' ('+sessions.length+' sessions)':''),'var(--teal)'],
+        ['Check-ins done',[ci.morning?'morning':'',ci.afternoon?'afternoon':'',ci.evening?'evening':''].filter(Boolean).join(', ')||'none','var(--accent3)'],
+      ].map(([l,v,c])=>`<div class="debrief-metric"><div class="debrief-metric-label">${l}</div><div class="debrief-metric-val" style="color:${c}">${v}</div></div>`).join('')}
+    </div>
+    
+    <div class="debrief-section">
+      <div class="debrief-section-title">AI Analysis</div>
+      <div class="debrief-text">${insight}</div>
+    </div>
+    
+    ${patterns.length>0?`
+    <div class="debrief-section">
+      <div class="debrief-section-title">Patterns from your data</div>
+      ${patterns.map(pt=>`<div class="pattern-alert"><div class="pattern-alert-text">${pt}</div></div>`).join('')}
+    </div>`:''}
+    
+    <div class="debrief-section">
+      <div class="debrief-section-title">3 things for tomorrow</div>
+      ${tomorrowTips.slice(0,3).map((tip,i)=>`
+        <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="width:22px;height:22px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent3);flex-shrink:0">${i+1}</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.6;padding-top:2px">${tip}</div>
+        </div>`).join('')}
+    </div>
+    
+    ${!state.isPro?`
+    <div style="background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:var(--rs);padding:14px;text-align:center;margin-top:10px">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Upgrade to Pro for deeper AI analysis, weekly reports, and pattern detection across months of data.</div>
+      <button onclick="openUpgrade()" style="background:linear-gradient(135deg,#7C5CFC,#9B7FFF);border:none;border-radius:var(--rs);padding:11px 20px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer">Upgrade — $4.99/month</button>
+    </div>`:''}
+  `;
+}
+
+// ── STREAK ───────────────────────────────────────────────────────
+function updateStreak(){
+  const today=todayStr();
+  const yesterday=new Date(); yesterday.setDate(yesterday.getDate()-1);
+  const yStr=yesterday.toISOString().split('T')[0];
+  const hasToday=state.moods.some(m=>m.date===today)||Object.keys(state.checkins[today]||{}).length>0;
+  if(hasToday){
+    if(state.lastCheckinDate===yStr){ state.streak=(state.streak||0)+1; }
+    else if(state.lastCheckinDate!==today){ state.streak=1; }
+    state.lastCheckinDate=today;
+  }
+  save(state);
+  document.getElementById('streakCount').textContent=state.streak||0;
+}
+
+// ── UPGRADE ──────────────────────────────────────────────────────
+function openUpgrade(){ document.getElementById('upgradeScreen').classList.add('open'); }
+function closeUpgrade(){ document.getElementById('upgradeScreen').classList.remove('open'); }
+function selectPlan(plan){
+  selectedPlanType=plan;
+  document.getElementById('planMonthly').classList.toggle('selected',plan==='monthly');
+  document.getElementById('planYearly').classList.toggle('selected',plan==='yearly');
+}
+function activatePro(){
+  state.isPro=true;
+  save(state);
+  closeUpgrade();
+  renderAll();
+  showToast('🎉 Welcome to LifePulse Pro!');
+}
+
+// ── TABS ─────────────────────────────────────────────────────────
+function switchTab(tab){
+  const tabs={today:'todayScreen',habits:'habitsScreen',money:'moneyScreen',focus:'focusScreen',insights:'insightsScreen'};
+  const tabBtns={today:'tabToday',habits:'tabHabits',money:'tabMoney',focus:'tabFocus',insights:'tabInsights'};
+  Object.values(tabs).forEach(id=>document.getElementById(id).classList.remove('active'));
+  Object.values(tabBtns).forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById(tabs[tab]).classList.add('active');
+  document.getElementById(tabBtns[tab]).classList.add('active');
+  if(tab==='habits') renderHabitsScreen();
+  if(tab==='money') renderExpenseScreen();
+  if(tab==='focus') renderFocusScreen();
+  if(tab==='insights') renderInsightsScreen();
+}
+
+// ── TOAST ────────────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+init();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('SW registered'))
+      .catch(err => console.log('SW failed:', err));
+  });
+}
+</script>
+
+<script>
+const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+const isInStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+window.addEventListener('DOMContentLoaded', () => {
+  if (isIOS && !isInStandalone && !localStorage.getItem('lp_install_shown')) {
+    const banner = document.getElementById('iosBanner');
+    if (banner) banner.style.display = 'flex';
+  }
+});
+</script>
+</body>
+</html>

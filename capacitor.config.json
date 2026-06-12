@@ -1,0 +1,11 @@
+{
+  "appId": "com.purityapps.lifepulse",
+  "appName": "LifePulse",
+  "webDir": ".",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#0A0A14"
+  }
+}
