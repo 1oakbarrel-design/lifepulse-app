@@ -1,7 +1,7 @@
 {
   "appId": "com.purityapps.lifepulse",
   "appName": "LifePulse",
-  "webDir": ".",
+  "webDir": "web",
   "server": {
     "androidScheme": "https"
   },
